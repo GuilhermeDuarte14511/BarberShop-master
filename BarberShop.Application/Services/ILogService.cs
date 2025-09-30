@@ -2,7 +2,8 @@
 {
     public interface ILogService
     {
-        Task SaveLogAsync(string logLevel, string source, string message, string data, string resourceId = null);
+        Task SaveLogAsync(string logLevel, string source, string message, string? data = null, string? resourceId = null);
     }
 }
+
 

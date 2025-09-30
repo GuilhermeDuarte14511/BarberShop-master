@@ -21,7 +21,7 @@ namespace BarberShop.Application.Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public async Task SaveLogAsync(string logLevel, string source, string message, string data = null, string resourceId = null)
+        public async Task SaveLogAsync(string logLevel, string source, string message, string? data = null, string? resourceId = null)
         {
             try
             {
@@ -61,3 +61,4 @@ namespace BarberShop.Application.Services
 
     }
 }
+
