@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Npgsql" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="Quartz" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" />
+    <PackageReference Include="Quartz.Extensions.Hosting" />
+    <PackageReference Include="RabbitMQ.Client" />
+    <PackageReference Include="SendGrid" />
+    <PackageReference Include="Stripe.net" />
+    <PackageReference Include="WebPush" />
+    <PackageReference Include="X.PagedList.Mvc.Core" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BarberShop.Domain\BarberShop.Domain.csproj" />
+    <ProjectReference Include="..\BarberShop.Infrastructure\BarberShop.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\Portifólios\BarberShopOficial\BarberShop.Application\DTOs\.editorconfig" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="D:\Portifólios\BarberShopOficial\BarberShop.Application\DTOs\.editorconfig" />
+  </ItemGroup>
+</Project>

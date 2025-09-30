@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "identityapp1": {
+      "ignored": "true",
+      "type": "identityapp"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "EspacoBarberShopOficial",
+      "dynamicId": null
+    }
+  }
+}

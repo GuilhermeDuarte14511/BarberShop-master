@@ -1,0 +1,225 @@
+﻿@model IEnumerable<BarberShop.Domain.Entities.Barbeiro>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Barbeiros";
+
+}
+
+<div id="barbeiroPage" class="container mt-5">
+    <h2 class="text-center">Gerenciar Barbeiros</h2>
+    <button class="btn mb-3 btnAdicionarCustom" id="btnAdicionarBarbeiro">
+        Adicionar Barbeiro
+    </button>
+    <div class="row">
+        @foreach (var barbeiro in Model)
+        {
+            <div class="col-md-4 col-lg-3 mb-4">
+                <div class="card bg-dark text-light h-100 shadow-sm">
+                    <div class="card-body">
+                        <!-- Foto do barbeiro com borda vermelha -->
+                        <div class="position-relative text-center mb-3">
+                            <img src="@(barbeiro.Foto != null ? "data:image/png;base64," + Convert.ToBase64String(barbeiro.Foto) : "https://via.placeholder.com/100")"
+                                 alt="Foto do @barbeiro.Nome"
+                                 class="rounded-circle photo-preview"
+                                 style="width: 100px; height: 100px; object-fit: cover; cursor: pointer; border: 3px solid #e74c3c; padding: 5px;"
+                                 data-bs-toggle="modal"
+                                 data-bs-target="#visualizarFotoModal"
+                                 data-foto="@(barbeiro.Foto != null ? "data:image/png;base64," + Convert.ToBase64String(barbeiro.Foto) : "https://via.placeholder.com/100")">
+                        </div>
+
+                        <!-- Nome do barbeiro -->
+                        <p class="card-text"><strong>Nome:</strong> @barbeiro.Nome</p>
+
+                        <!-- Email -->
+                        <p class="card-text"><strong>Email:</strong> @barbeiro.Email</p>
+
+                        <!-- Telefone -->
+                        <p class="card-text"><strong>Telefone:</strong> @barbeiro.Telefone</p>
+
+                        <!-- Linha separadora antes dos botões -->
+                        <hr class="text-secondary" />
+
+                        <!-- Botões de ação -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-sm me-2 btnEditar" data-id="@barbeiro.BarbeiroId">Editar</button>
+                            <button class="btn btn-danger btn-sm btnExcluirBarbeiro" data-id="@barbeiro.BarbeiroId">Excluir</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<!-- Modal para Visualizar Foto -->
+<div class="modal fade" id="visualizarFotoModal" tabindex="-1" aria-labelledby="visualizarFotoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title" id="visualizarFotoLabel">Foto do Barbeiro</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="visualizarFoto" src="" alt="Foto do Barbeiro" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Adição -->
+<div class="modal fade" id="adicionarModal" tabindex="-1" aria-labelledby="adicionarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formAdicionarBarbeiro" enctype="multipart/form-data" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="adicionarModalLabel">Adicionar Barbeiro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3">
+                        <img src="https://via.placeholder.com/100" id="adicionarFotoPreview" alt="Foto do Barbeiro" class="rounded-circle" style="width: 100px; height: 100px; object-fit: cover;">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="adicionarFoto">Adicionar Foto</label>
+                        <input type="file" class="form-control" id="adicionarFoto" name="Foto" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="Nome">Nome</label>
+                        <input type="text" class="form-control" id="adicionarNome" name="Nome" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="adicionarEmail" name="Email" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Telefone">Telefone</label>
+                        <input type="text" class="form-control" id="adicionarTelefone" name="Telefone" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Edição -->
+<div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="formEditarBarbeiro" enctype="multipart/form-data" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarModalLabel">Editar Barbeiro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="editarBarbeiroId" name="BarbeiroId" />
+                    <div class="text-center mb-3">
+                        <div class="position-relative d-inline-block">
+                            <!-- Foto do barbeiro com borda vermelha arredondada e imagem maior -->
+                            <img src="" id="editarFotoPreview" alt="Foto do Barbeiro" class="rounded-circle mb-3 photo-preview"
+                                 style="width: 150px; height: 150px; object-fit: cover; border: 3px solid #e74c3c; padding: 5px; border-radius: 50%; cursor: pointer;">
+                        </div>
+                    </div>
+
+                    <!-- Barra de progresso para o upload da foto -->
+                    <div id="uploadProgress" class="progress mb-3 d-none">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" style="width: 0%;"></div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="editarFoto">Alterar Foto</label>
+                        <input type="file" class="form-control" id="editarFoto" name="Foto" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label for="Nome">Nome</label>
+                        <input type="text" class="form-control" id="editarNome" name="Nome" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="email" class="form-control" id="editarEmail" name="Email" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Telefone">Telefone</label>
+                        <input type="text" class="form-control" id="editarTelefone" name="Telefone" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="Servicos">Serviços Associados</label>
+                        <div id="servicosContainer" class="form-control bg-light text-dark" style="height: auto; max-height: 200px; overflow-y: auto;">
+                            <!-- Serviços serão carregados dinamicamente -->
+                        </div>
+                        <button id="btnAdicionarServicoEditar" type="button" class="btn btn-success btn-sm mt-2" data-barbeiro-id="">Adicionar Serviço</button>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="adicionarServicoModal" tabindex="-1" aria-labelledby="adicionarServicoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="adicionarServicoModalLabel">Adicionar Serviços</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="servicosDisponiveisContainer" class="form-control bg-light text-dark" style="height: auto; max-height: 300px; overflow-y: auto;">
+                    <!-- Serviços não vinculados serão carregados dinamicamente -->
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal para Exclusão -->
+<div class="modal fade" id="excluirModal" tabindex="-1" aria-labelledby="excluirModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="excluirModalLabel">Excluir Barbeiro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Você tem certeza que deseja excluir o barbeiro <strong id="excluirBarbeiroNome"></strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
+                <button type="button" id="btnConfirmarExcluir" class="btn btn-danger">Sim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Notificação -->
+<div class="modal fade" id="notificacaoModal" tabindex="-1" aria-labelledby="notificacaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="notificacaoModalLabel">Notificação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="notificacaoMensagem">
+                <!-- A mensagem de notificação será inserida aqui -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>

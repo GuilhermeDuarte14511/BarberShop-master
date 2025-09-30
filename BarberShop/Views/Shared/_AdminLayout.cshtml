@@ -1,0 +1,250 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-377Y66G6FR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-377Y66G6FR');
+    </script>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BarberShop Admin</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/bootstrap5/main.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar/main.min.css" rel="stylesheet">
+    <!-- Scripts para Chart.js e jQuery UI -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white text-center py-4 border-bottom">
+                <h4>BarberShop Admin</h4>
+            </div>
+            @{
+                string role = User.IsInRole("Admin") ? "Admin" : (User.IsInRole("Barbeiro") ? "Barbeiro" : "Outro");
+            }
+
+            <div class="list-group list-group-flush">
+                @switch (role)
+                {
+                    case "Admin":
+                        <a href="@Url.Action("Index", "Admin")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-chart-line mr-2"></i> Dashboards
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-user-friends mr-2"></i> Barbeiros
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Servico")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-cut mr-2"></i> Serviços
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Pagamento")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-credit-card mr-2"></i> Pagamentos
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Agendamento")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-calendar-alt mr-2"></i> Agendamentos
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Barbearia")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-info-circle mr-2"></i> Meus Dados
+                        </a>
+                        <hr class="sidebar-divider">
+                        <!-- Dropdown "Horários" -->
+                        <div class="list-group-item bg-dark text-white">
+                            <a href="#submenuHorarios" class="text-white text-decoration-none dropdown-toggle" data-bs-toggle="collapse" aria-expanded="false">
+                                <i class="fas fa-clock mr-2"></i> Horários
+                            </a>
+                            <div class="collapse" id="submenuHorarios">
+                                <a href="@Url.Action("Index", "Feriado")" class="list-group-item list-group-item-action bg-dark text-white ml-3">
+                                    <i class="fas fa-calendar-alt mr-2"></i> Feriados
+                                </a>
+                                <hr class="sidebar-divider">
+                                <a href="@Url.Action("Index", "IndisponibilidadeBarbeiro")" class="list-group-item list-group-item-action bg-dark text-white ml-3">
+                                    <i class="fas fa-user-clock mr-2"></i> Indisponibilidade
+                                </a>
+                                <hr class="sidebar-divider">
+                            </div>
+                        </div>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("Index", "Usuario")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-users mr-2"></i> Usuários
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("AvaliacoesBarbearia", "Admin")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-star mr-2"></i> Avaliações
+                        </a>
+                        <hr class="sidebar-divider">
+                        break;
+
+                    case "Barbeiro":
+                        <a href="@Url.Action("Index", "Admin")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-chart-line mr-2"></i> Dashboards
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("MeusAgendamentos", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-calendar-alt mr-2"></i> Meus Agendamentos
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("MeusServicos", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-cut mr-2"></i> Meus Serviços
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("MeusHorarios", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-clock mr-2"></i> Minhas Datas
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("MeusDadosBarbeiro", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-user mr-2"></i> Meus Dados
+                        </a>
+                        <hr class="sidebar-divider">
+                        <a href="@Url.Action("MinhasAvaliacoes", "Barbeiro")" class="list-group-item list-group-item-action bg-dark text-white">
+                            <i class="fas fa-star mr-2"></i> Minhas Avaliações
+                        </a>
+                        <hr class="sidebar-divider">
+                        break;
+
+                    default:
+                        <p class="text-white text-center mt-3">Nenhum menu disponível para o seu papel.</p>
+                        break;
+                }
+
+                <!-- Logout -->
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="list-group-item list-group-item-action bg-dark text-white">
+                    <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                </a>
+                <hr class="sidebar-divider">
+
+                <!-- Formulário oculto para o logout -->
+                <form id="logout-form" action="@Url.Action("LogoutAdmin", "Login")" method="post" style="display: none;">
+                    @Html.AntiForgeryToken()
+                </form>
+            </div>
+        </div>
+
+        <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom">
+                <button class="btn btn-primary" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h5 class="text-white ml-3">Bem-vindo ao Sistema de Barbearias</h5>
+
+                <div class="ms-auto d-flex align-items-center" id="notificationBell">
+                    <div class="position-relative">
+                        <a href="#" class="text-white" id="notificationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i id="notificationBellIcon" class="fas fa-bell fa-lg"></i>
+                            <span id="notificationCounter" class="badge bg-danger rounded-circle"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+                            <li>
+                                <h6 class="dropdown-header">Notificações</h6>
+                            </li>
+                            <li>
+                                <h6 class="text-primary px-3">Novas Notificações</h6>
+                                <ul id="notificationListUnread" class="list-unstyled m-0 p-0">
+                                    <!-- Notificações não lidas serão carregadas dinamicamente -->
+                                </ul>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <h6 class="text-secondary px-3">Notificações Lidas</h6>
+                                <ul id="notificationListRead" class="list-unstyled m-0 p-0">
+                                    <!-- Notificações lidas serão carregadas dinamicamente -->
+                                </ul>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a id="viewAllNotifications" class="dropdown-item text-center" href="/Notificacao/Todas">Ver todas as notificações</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </nav>
+
+            <div class="container-fluid mt-4">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Notificações -->
+    <div class="modal fade" id="notificationModal" tabindex="-1" aria-labelledby="notificationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Cabeçalho do modal -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="notificationModalLabel">Notificações</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <!-- Corpo do modal -->
+                <div class="modal-body">
+                    <h6>Novas Notificações</h6>
+                    <ul id="modalNotificationListUnread" class="list-unstyled">
+                        <!-- Notificações não lidas irão aqui -->
+                    </ul>
+                    <hr>
+                    <h6>Notificações Lidas</h6>
+                    <ul id="modalNotificationListRead" class="list-unstyled">
+                        <!-- Notificações lidas irão aqui -->
+                    </ul>
+                </div>
+                <!-- Rodapé do modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <a href="/Notificacao/Todas" class="btn btn-primary">Ver todas as notificações</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts adicionais -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.2.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar/main.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        $(document).ready(function () {
+            if (window.innerWidth < 768) {
+                $("#wrapper").addClass("toggled");
+            }
+            $("#menu-toggle").click(function (e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("toggled");
+            });
+            $(window).resize(function () {
+                if (window.innerWidth < 768) {
+                    $("#wrapper").addClass("toggled");
+                } else {
+                    $("#wrapper").removeClass("toggled");
+                }
+            });
+        });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

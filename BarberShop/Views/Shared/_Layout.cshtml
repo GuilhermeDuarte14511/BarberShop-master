@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-377Y66G6FR"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-377Y66G6FR');
+    </script>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BarberShop</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Tui.Calendar CSS -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css">
+
+    <!-- Font Awesome (Ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Cliente") && User.HasClaim(c => c.Type == "BarbeariaUrl") && !string.IsNullOrEmpty(Context.Request.Path.Value.Split('/').Skip(1).FirstOrDefault()) && !string.IsNullOrEmpty(Context.Request.Path.Value.Split('/').Skip(2).FirstOrDefault()))
+    {
+        var barbeariaUrl = ViewData["BarbeariaUrl"] as string ?? "";
+        var currentPath = Context.Request.Path.Value?.ToLower() ?? "";
+
+        <!-- Header -->
+        <header class="header">
+            <h1 class="h4 text-white">BarberShop</h1>
+            <div class="dropdown profile-menu">
+                <!-- Ícone de perfil -->
+                <button class="btn btn-dark profile-button" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-user-circle fa-lg"></i>
+                </button>
+                <!-- Menu suspenso -->
+                <ul class="dropdown-menu dropdown-menu-end profile-menu-dropdown" aria-labelledby="profileDropdown">
+                    <li>
+                        <a class="dropdown-item @(currentPath.Contains("/cliente/menuprincipal") ? "active" : "")" href="@Url.Action("MenuPrincipal", "Cliente", new { barbeariaUrl })">
+                            <i class="fas fa-home"></i> Menu Principal
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item @(currentPath.Contains("/cliente/solicitarservico") ? "active" : "")" href="@Url.Action("SolicitarServico", "Cliente", new { barbeariaUrl })">
+                            <i class="fas fa-cut"></i> Solicitar Serviço
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item @(currentPath.Contains("/agendamento/historico") ? "active" : "")" href="@Url.Action("Historico", "Agendamento", new { barbeariaUrl })">
+                            <i class="fas fa-history"></i> Histórico
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item @(currentPath.Contains("/cliente/meusdadoscliente") ? "active" : "")" href="@Url.Action("MeusDadosCliente", "Cliente", new { barbeariaUrl })">
+                            <i class="fas fa-user-edit"></i> Meus Dados
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item @(currentPath.Contains("/cliente/alterarsenhacliente") ? "active" : "")" href="@Url.Action("AlterarSenhaCliente", "Cliente", new { barbeariaUrl })">
+                            <i class="fas fa-lock"></i> Alterar Senha
+                        </a>
+                    </li>
+                    <li>
+                        <form id="logoutForm" action="@Url.Action("Logout", "Login", new { barbeariaUrl })" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="dropdown-item">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </header>
+    }
+
+
+
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <div id="toastContainer" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+
+    <!-- Botão de WhatsApp -->
+    <a href="https://wa.me/5511963516246?text=Ol%C3%A1%2C%20gostaria%20de%20tirar%20uma%20duvida.." target="_blank" class="whatsapp-button" title="Fale conosco no WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- jQuery -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Tui Code Snippet -->
+    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.min.js"></script>
+
+    <!-- Tui.Calendar JS -->
+    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
+
+    <!-- Day.js -->
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/pt-br.js"></script>
+    <script>
+        dayjs.locale('pt-br');
+    </script>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr@4.6.9/dist/l10n/pt.js"></script>
+
+    <!-- Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const stripe = Stripe("pk_live_51QFMA5Hl3zYZjP9pt96kFgHES5ArjpXgdXa2AXrZr3IXsqpWC9JpHAsLajdeOMCIoCu31wruWj5SLeqbmh9aeVPU003NEkIbJe");
+    </script>
+
+    <!-- Custom JS -->
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
